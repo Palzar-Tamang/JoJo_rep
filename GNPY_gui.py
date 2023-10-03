@@ -901,9 +901,9 @@ def display_data():
              txt_output.insert(END, f'  - {key}: {value}\n')
             txt_output.insert(END,'-------------------------------------\n')    
         txt_output.insert(END, '\n')
-def crtjson():
-     
-     
+
+
+def crtjson(): 
      filename=e.get()
      print(filename)
      print(os.getcwd())
