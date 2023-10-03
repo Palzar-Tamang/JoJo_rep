@@ -1,14 +1,14 @@
 
-
 from tkinter import *
+from tkinter import ttk
 import json
-
+import os
 # main root object
 
 #eqp={"EDFA":[],"Fiber":[],"Roadms":[],"Span":[],"Transceiver":[],"SI":[]}
 root = Tk()
 
-# Title of GUI rootdow
+# Title of GUI root window
 root.title('Json creator')
 
 # Size of rootdow
@@ -32,7 +32,6 @@ e.place(relx=0.25,rely=0.135)
 # path = './'
 X=IntVar()
 Y=IntVar()
-    
 EDFA=[]
 def createamp():
     crteamp=Toplevel(root)
@@ -47,93 +46,375 @@ def createamp():
 
     amptyp=Label(crteamp, text="type_def",fg="SteelBlue2",font= ('Helvetica 15'),)
     amptyp.place(relx= .03, rely=0.15)
-    amptype = Entry(crteamp, font="Helvetica 15", width=30)
-    amptype.place(relx=0.3,rely=0.15)
-   
+    combo =ttk.Combobox(crteamp,font=("Hetvitica 15"),width=28,values=[
+    "advanced_model","variable_gain",
+    "openroadm","openroadm_preamp",
+    "openroadm_booster","fixed_gain",
+    "dual_stage"])
+    combo.place(relx=0.3,rely=0.15)
+    
     ampgainmax=Label(crteamp, text="gain_flatmax",fg="SteelBlue2",font= ('Helvetica 15'))
-    ampgainmax.place(relx= .03, rely=0.2)
+    #ampgainmax.place(relx= .03, rely=0.2)
     ampGainmax = Entry(crteamp, font="Helvetica 15", width=30)
-    ampGainmax.place(relx=0.3,rely=0.2)
+    #ampGainmax.place(relx=0.3,rely=0.2)
 
     ampgainmin=Label(crteamp, text="gain_min",fg="SteelBlue2",font= ('Helvetica 15'))
-    ampgainmin.place(relx= .03, rely=0.25)
+    #ampgainmin.place(relx= .03, rely=0.25)
     ampGainmin = Entry(crteamp, font="Helvetica 15", width=30)
-    ampGainmin.place(relx=0.3,rely=0.25)
+    #ampGainmin.place(relx=0.3,rely=0.25)
     
     Maxpow=Label(crteamp, text="p_max",fg="SteelBlue2",font= ('Helvetica 15'))
-    Maxpow.place(relx= .03, rely=0.3)
+    #Maxpow.place(relx= .03, rely=0.3)
     maxpow = Entry(crteamp, font="Helvetica 15", width=30)
-    maxpow.place(relx=0.3,rely=0.3)
+    #maxpow.place(relx=0.3,rely=0.3)
 
     adconfig=Label(crteamp,text="advanced_config_from_json",fg="SteelBlue2",font= ('Helvetica 15'))
-    adconfig.place(relx= .03, rely=0.35)
+    #adconfig.place(relx= .03, rely=0.35)
     Adconfig = Entry(crteamp, font="Helvetica 15", width=30)
-    Adconfig.place(relx=0.3,rely=0.35)
+    #Adconfig.place(relx=0.3,rely=0.35)
 
     voa=Label(crteamp,text="out_voa_auto",fg="SteelBlue2",font= ('Helvetica 15'))
-    voa.place(relx= .03, rely=0.4)
-    Voa = Checkbutton(crteamp,text="TRUE or FALSE",font= ('Helvetica 15'),variable=X,onvalue=1,offvalue=0)
-    Voa.place(relx=0.3,rely=0.4)
-    VOATF=""
-    if X.get()==1:
-        VOATF="true"
-    else:
-        VOATF="false"   
+    #voa.place(relx= .03, rely=0.4)
+    Voa = Checkbutton(crteamp,text="True or False",font= ('Helvetica 15'),variable=X,onvalue=True,offvalue=False)
+    #Voa.place(relx=0.3,rely=0.4)
+    
 
 
     nfmin=Label(crteamp,text="nf_min",fg="SteelBlue2",font= ('Helvetica 15'))
-    nfmin.place(relx= .03, rely=0.45)
+    #nfmin.place(relx= .03, rely=0.45)
     Nfmin = Entry(crteamp, font="Helvetica 15", width=30)
-    Nfmin.place(relx=0.3,rely=0.45)
+    #Nfmin.place(relx=0.3,rely=0.45)
 
     nfmax=Label(crteamp,text="nf_max",fg="SteelBlue2",font= ('Helvetica 15'))
-    nfmax.place(relx= .03, rely=0.50)
+    #nfmax.place(relx= .03, rely=0.50)
     Nfmax = Entry(crteamp, font="Helvetica 15", width=30)
-    Nfmax.place(relx=0.3,rely=0.5)
+    #Nfmax.place(relx=0.3,rely=0.5)
 
     nf=Label(crteamp,text="nf_coef",fg="SteelBlue2",font= ('Helvetica 15'))
-    nf.place(relx= .03, rely=0.55)
+    #nf.place(relx= .03, rely=0.55)
     Nf = Entry(crteamp, font="Helvetica 15", width=30)
-    Nf.place(relx=0.3,rely=0.55)
+    #Nf.place(relx=0.3,rely=0.55)
+
+    nf0=Label(crteamp,text="nf0",fg="SteelBlue2",font= ('Helvetica 15'))
+
+    Nf0 = Entry(crteamp, font="Helvetica 15", width=30)
 
     Afd=Label(crteamp,text="allowed_for_design",fg="SteelBlue2",font= ('Helvetica 15'))
-    Afd.place(relx= .03, rely=0.65)
-    afd = Checkbutton(crteamp,text="TRUE or FALSE",font= ('Helvetica 15'),variable=Y,onvalue=True,offvalue=False)
-    afd.place(relx=0.3,rely=0.65)
-    AFDTF=""
-    if Y.get()==1:
-        AFDTF="true"
-    else:
-        AFDTF="false"    
+    #Afd.place(relx= .03, rely=0.65)
+    afd = Checkbutton(crteamp,text="True or False",font= ('Helvetica 15'),variable=Y,onvalue=True,offvalue=False)
+    #afd.place(relx=0.3,rely=0.65)
     
+
+    global msl
+    msl=[""]
+    def remove():
+            if msl[0]=="":
+                pass
+
+            elif msl[0]=="advanced_model" or msl[0]=="variable_gain" or msl[0]=="openroadm" or msl[0]=="openroadm_preamp" or msl[0]=="openroadm_booster" or msl[0]=="fixed_gain":
+                ampgainmax.place_forget()
+                ampGainmax.place_forget()
+                ampgainmin.place_forget()
+                ampGainmin.place_forget()
+                Maxpow.place_forget()
+                maxpow.place_forget()
+                adconfig.place_forget()
+                Adconfig.place_forget()
+                voa.place_forget()
+                Voa.place_forget()
+                Afd.place_forget()
+                afd.place_forget()
+                nfmin.place_forget()
+                Nfmin.place_forget()    
+                nfmax.place_forget()
+                Nfmax.place_forget()
+                nf.place_forget()
+                Nf.place_forget()   
+                nf0.place_forget()
+                Nf0.place_forget()
+                Afd.place_forget()
+                afd.place_forget()
+
+
+            # elif msl[0]=="variable_gain":
+            #     ampgainmax.place_forget()
+            #     ampGainmax.place_forget()
+            #     ampgainmin.place_forget()
+            #     ampGainmin.place_forget()
+            #     Maxpow.place_forget()
+            #     maxpow.place_forget()
+            #     voa.place_forget()
+            #     Voa.place_forget()
+            #     Afd.place_forget()
+            #     afd.place_forget()
+            #     nfmin.place_forget()
+            #     Nfmin.place_forget()    
+            #     nfmax.place_forget()
+            #     Nfmax.place_forget()  
+               
+            # elif msl[0]=="openroadm":
+            #     ampgainmax.place_forget()
+            #     ampGainmax.place_forget()
+            #     ampgainmin.place_forget()
+            #     ampGainmin.place_forget()
+            #     Maxpow.place_forget()
+            #     maxpow.place_forget()
+            #     Afd.place_forget()
+            #     afd.place_forget()
+            #     nf.place_forget()
+            #     Nf.place_forget()
+
+            # elif msl[0]=="openroadm_preamp" or msl[0]=="openroadm_booster":
+            #     ampgainmax.place_forget()
+            #     ampGainmax.place_forget()
+            #     ampgainmin.place_forget()
+            #     ampGainmin.place_forget()
+            #     Maxpow.place_forget()
+            #     maxpow.place_forget()
+            #     Afd.place_forget()
+            #     afd.place_forget()
+           
+            # elif msl[0]=="fixed_gain":
+            #     ampgainmax.place_forget()
+            #     ampGainmax.place_forget()
+            #     ampgainmin.place_forget()
+            #     ampGainmin.place_forget()
+            #     Maxpow.place_forget()
+            #     maxpow.place_forget()
+            #     nf0.place_forget()
+            #     Nf0.place_forget()
+            #     Afd.place_forget()
+            #     afd.place_forget()
+    def shows(): 
+      remove()
+      if combo.get()=="advanced_model":  
+        
+        ampgainmax.place(relx= .03, rely=0.2)
+       
+        ampGainmax.place(relx=0.3,rely=0.2)
+        
+        ampgainmin.place(relx= .03, rely=0.25)
+        
+        ampGainmin.place(relx=0.3,rely=0.25)
+       
+        Maxpow.place(relx= .03, rely=0.3)
+       
+        maxpow.place(relx=0.3,rely=0.3)
+        
+        adconfig.place(relx= .03, rely=0.35)
+       
+        Adconfig.place(relx=0.3,rely=0.35)
+
+        voa.place(relx= .03, rely=0.4)
+        
+        Voa.place(relx=0.3,rely=0.4)
+    
+        Afd.place(relx= .03, rely=0.45)
+        
+        afd.place(relx=0.3,rely=0.45)
+        
+           
+      elif combo.get()=="variable_gain":
+            
+            
+            ampgainmax.place(relx= .03, rely=0.2)
+          
+            ampGainmax.place(relx=0.3,rely=0.2)
+ 
+            ampgainmin.place(relx= .03, rely=0.25)
+            
+            ampGainmin.place(relx=0.3,rely=0.25)
+            
+            Maxpow.place(relx= .03, rely=0.3)
+            
+            maxpow.place(relx=0.3,rely=0.3)
+            
+            nfmin.place(relx= .03, rely=0.35)
+            
+            Nfmin.place(relx=0.3,rely=0.35)
+            
+            nfmax.place(relx= .03, rely=0.4)
+            
+            Nfmax.place(relx=0.3,rely=0.4)
+   
+            Afd.place(relx= .03, rely=0.45)
+            
+            afd.place(relx=0.3,rely=0.45)
+            
+            
+
+      elif combo.get()=="openroadm":
+              
+            ampgainmax.place(relx= .03, rely=0.2)
+          
+            ampGainmax.place(relx=0.3,rely=0.2)
+            
+            ampgainmin.place(relx= .03, rely=0.25)
+            
+            ampGainmin.place(relx=0.3,rely=0.25)
+            
+            Maxpow.place(relx= .03, rely=0.3)
+            
+            maxpow.place(relx=0.3,rely=0.3)
+
+            nf.place(relx= .03, rely=0.35)
+
+            Nf.place(relx=0.3,rely=0.35)
+
+      elif combo.get()=="openroadm_preamp" or combo.get()=="openroadm_booster":
+             
+            ampgainmax.place(relx= .03, rely=0.2)
+          
+            ampGainmax.place(relx=0.3,rely=0.2)
+
+            ampgainmin.place(relx= .03, rely=0.25)
+            
+            ampGainmin.place(relx=0.3,rely=0.25)
+  
+            Maxpow.place(relx= .03, rely=0.3)
+            
+            maxpow.place(relx=0.3,rely=0.3)
+
+            Afd.place(relx= .03, rely=0.35)
+        
+            afd.place(relx=0.3,rely=0.35)
+
+      elif combo.get()=="fixed_gain":
+            
+            
+            ampgainmax.place(relx= .03, rely=0.2)
+          
+            ampGainmax.place(relx=0.3,rely=0.2)
+
+            ampgainmin.place(relx=.03, rely=0.25)
+            
+            ampGainmin.place(relx=0.3,rely=0.25)
+ 
+            Maxpow.place(relx=.03, rely=0.3)
+            
+            maxpow.place(relx=0.3,rely=0.3)
+
+            nf0.place(relx=.03,rely=0.35)
+
+            Nf0.place(relx=0.3,rely=0.35)
+
+            Afd.place(relx= .03, rely=0.4)
+        
+            afd.place(relx=0.3,rely=0.4)
+             
+      msl.append(combo.get())
+      print(msl)
+      msl.pop(0)
+               
+      #elif amptype.cget("text")=="openroadm" : 
+    #   elif
+    #   elif
+    #   elif    
+    
+            
+
+    #   Remove=Button(crteamp,text="remove",width=20,font=("Helvitica 12"),command=remove)
+    #   Remove.place(relx=0.7,rely=0.35)
+    
+    dropdown=Button(crteamp,text="Show other parameters",width=20,font=("Helvitica 12"),command=shows)
+    dropdown.place(relx=0.66,rely=0.15)
+    
+
+    
+   
    
     def ampdict():   #Function under the createamp that stores the given parameters in a list called EDFA
         a = ampn.get()
-        c = amptype.get()
-        b = int(ampGainmax.get())
-        d = int(ampGainmin.get())
-        f = float(maxpow.get())
-        g = Adconfig.get()
-        #h = Voa.get()
-        #i = afd.get()
-        #print(a)
-        #print(b) 
-        #print(c)
-        global data
-        data = {
-        "type_variety":a,
-        "type_def": c , 
-        "gain_flatmax":b,
-        "gain_min": d,
-        "p_max": f,             # e has been used for filename 
-        "advanced_config_from_json":g,
-        "out_voa_auto":VOATF,
-        "allowed_for_design":AFDTF
+        c = combo.get()
+        AFDTF=""
+        if Y.get()==1:
+            AFDTF=True
+            #print(AFDTF)
+        else:
+            AFDTF=False     
+            #print(AFDTF)
 
-         }
+        VOATF=""
+        if X.get()==1:
+            VOATF=True
+            #print(VOATF)
+        else:
+            VOATF=False  
+            #print(VOATF) 
+            #     
+        if combo.get()=="advanced_model"or combo.get()=="variable_gain" or combo.get()=="openroadm" or combo.get()=="openroadm_preamp" or combo.get()=="opemroadm_booster" or combo.get()=="fixed_gain":
+            b = int(ampGainmax.get())
+            d = int(ampGainmin.get())
+            f = float(maxpow.get())
+            
+            global data
+            if combo.get()=="advanced_model":
+                g = Adconfig.get()
+                
+                data = {
+                "type_variety":a,
+                "type_def": c , 
+                "gain_flatmax":b,
+                "gain_min": d,
+                "p_max": f,             # e has been used for filename 
+                "advanced_config_from_json":g,
+                "out_voa_auto":VOATF,  
+                "allowed_for_design":AFDTF
+
+                }
+                print(VOATF)
+                print(AFDTF)
+            elif combo.get()=="variable_gain":
+                h=float(Nfmin.get())
+                i=float(Nfmax.get())
+                print(AFDTF)
+                data = {
+               "type_variety":a,
+                "type_def": c, 
+                "gain_flatmax":b,
+                "gain_min": d,
+                "p_max": f, 
+                "nf_min": h,
+                "nf_max": i,
+                "allowed_for_design":AFDTF
+
+                } 
+
+            elif combo.get()=="openroadm":
+                j=float(Nf.get())
+                data = {
+               "type_variety":a,
+                "type_def": c, 
+                "gain_flatmax":b,
+                "gain_min": d,
+                "p_max": f, 
+                "nf_coef":j,
+                "allowed_for_design":AFDTF}
+
+            elif combo.get()=="openroadm_preamp" or combo.get()=="opemroadm_booster" :
+                data = {
+                "type_variety": a,
+                "type_def": c,
+                "gain_flatmax":b,
+                "gain_min": d,
+                "p_max": f,
+                "allowed_for_design":AFDTF
+                }
+
+            elif combo.get()=="fixed_gain":
+                k=float(Nf0.get())
+                data = {
+               "type_variety":a,
+                "type_def": c, 
+                "gain_flatmax":b,
+                "gain_min": d,
+                "p_max": f, 
+                "nf0":k,
+                "allowed_for_design":AFDTF
+                 } 
+
         EDFA.append(data)
         crteamp.destroy()
-        
 
     ampbutton=Button(crteamp, text="OK",bg="green3",font= ('Helvetica 15'),height=1,width=8,command=ampdict)
     ampbutton.place(relx=0.62,rely=0.75)
@@ -518,7 +799,7 @@ def Mode():
     txosnre= Entry(mode, font="Helvetica 15", width=30)
     txosnre.place(relx=0.3,rely=0.35)
 
-    mins=Label(mode,text="min_Spacing",fg="SteelBlue2",font= ('Helvetica 15'))
+    mins=Label(mode,text="min_spacing",fg="SteelBlue2",font= ('Helvetica 15'))
     mins.place(relx= .03, rely=0.4)
     minse= Entry(mode, font="Helvetica 15", width=30)
     minse.place(relx=0.3,rely=0.4)
@@ -603,26 +884,35 @@ def createtrx():
 
 
 
-
-
-   
-
-
-
-
 #transceiver
+add=os.getcwd()
+global Eqp    
+
+Eqp={"Edfa":EDFA,"Fiber":FIBER,"RamanFiber":RamanFIBER,"Span":SPAN,
+     "Roadm":ROADM,"SI":SI,"Transceiver":TRANSCEIVER}
+def display_data():
+    # Clear the existing content in the Text widget
+    txt_output.delete(1.0, END)
+    # Iterate through the dictionary and format the data
+    for equipments, items in Eqp.items():
+        txt_output.insert(END, f'{equipments}:\n')
+        for item in items:
+            for key, value in item.items():
+             txt_output.insert(END, f'  - {key}: {value}\n')
+            txt_output.insert(END,'-------------------------------------\n')    
+        txt_output.insert(END, '\n')
 def crtjson():
-     Eqp={"EDFA":EDFA,"Fiber":FIBER,"RamanFiber":RamanFIBER,"Span":SPAN,"Roadm":ROADM,"SI":SI,"Transceiver":TRANSCEIVER}
+     
+     
      filename=e.get()
      print(filename)
+     print(os.getcwd())
      json_object = json.dumps(Eqp, indent=4)
      # Writing to sample.json
-     with open(f"{filename}.json", "w") as outfile:
+     with open(os.path.join(add,f"{filename}.json"), "w") as outfile:
         outfile.write(json_object)
-     root.quit()    
+     root.quit()       
 
-        
-        
 amp=Button(root,text="Amplifiers",fg="SteelBlue1",bg="blue4",font= ('Helvetica 15'),height=1,width=10,command=createamp)
 amp.place(relx=0.03,rely=0.22)
 
@@ -644,9 +934,12 @@ si.place(relx=0.03,rely=0.52)
 transceiver=Button(root,text="Transceiver",fg="SteelBlue1",bg="blue4",font= ('Helvetica 15'),height=1,width=10,command=createtrx)
 transceiver.place(relx=0.03,rely=0.58)
 
+txt_output = Text(root, height=38, width=45)
+txt_output.place(relx=0.25,rely=0.2)
+display_button = Button(root, text="Preview",fg="SteelBlue1",bg="blue4",font= ('Helvetica 15'),height=1,width=10,command=display_data)
+display_button.place(relx=0.03,rely=0.66)
 
 
 createjson=Button(root, text="Create json",font= ('Helvetica 15'),command=crtjson)
 createjson.place(relx=0.75,rely=0.135)
 root.mainloop()
-
